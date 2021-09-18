@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { setCounterAction } from "../redux/actions";
+import GaugeChart from "react-gauge-chart";
 
 const Counter = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,15 @@ const Counter = () => {
           +
         </button>
       </div>
+     <div style={{backgroundColor: "black"}}>
+     <GaugeChart
+        id="gauge-chart3"
+        nrOfLevels={30}
+        colors={["#FF5F6D", "#FFC371"]}
+        arcWidth={0.3}
+        percent={localStorage?.counter}
+      />
+     </div>
     </div>
   );
 };
