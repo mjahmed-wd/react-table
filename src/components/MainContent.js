@@ -26,7 +26,7 @@ const Counter = ({ setIsOpenSidebar, isOpenSidebar, children }) => {
         </div>
       }
       {children}
-      <Footer />
+      <Footer isOpenSidebar={isOpenSidebar} />
     </div>
   );
 };

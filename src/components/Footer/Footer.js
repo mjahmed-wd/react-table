@@ -1,8 +1,8 @@
 import React from "react";
 
-const Footer = () => {
+const Footer = ({isOpenSidebar}) => {
   return (
-    <div className="footer m-0 mt-3 p-2 bg-secondary text-white container">
+    <div className={`footer w-100 m-0 mt-3 p-2 bg-secondary text-white pl-4 pr-4 text-center`}>
       <div className="row">
         <div className="col-4">
           <p>University</p>
