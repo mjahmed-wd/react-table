@@ -1,27 +1,40 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
-const initData={
-    name: "",
-    email:"",
-    gender:"",
-    phone:""
-}
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { setLocalDataAction } from "../redux/actions";
+const initData = {
+  name: "",
+  email: "",
+  gender: "",
+  phone: "",
+};
 const Data = () => {
+  const dispatch = useDispatch();
+  const { localStorage } = useSelector((state) => {
+    return state;
+  }, shallowEqual);
 
-const [gridData,setGridData]=useState([])
-console.log(gridData)
+  const [gridData, setGridData] = useState(localStorage?.localData);
+
+  useEffect(() => {
+    setGridData(localStorage?.localData);
+  }, [localStorage]);
+
   return (
     <div>
       <Formik
         initialValues={initData}
         // validate={}
         onSubmit={(values, { setSubmitting }) => {
-        const duplicateCheck= gridData?.find(item=>item?.email===values?.email)
-        console.log(duplicateCheck)
-        if(duplicateCheck){
-            return alert("Already Exists")
-        } 
-        setGridData((prev)=>[...prev,{...values}])
+          const duplicateCheck = gridData?.find(
+            (item) => item?.email === values?.email
+          );
+          if (duplicateCheck) {
+            return alert("Already Exists");
+          }
+          
+          dispatch(setLocalDataAction([...gridData, { ...values }]));
+          // setGridData((prev) => [...prev, { ...values }]);
         }}
       >
         {({
@@ -51,7 +64,7 @@ console.log(gridData)
               value={values.email}
             />
             {errors.email && touched.email && errors.email}
-            
+
             <input
               type="text"
               name="gender"
@@ -68,15 +81,13 @@ console.log(gridData)
               value={values.phone}
             />
             {errors.phone && touched.phone && errors.phone}
-            <button type="submit">
-              Submit
-            </button>
+            <button type="submit">Submit</button>
           </form>
         )}
       </Formik>
-      {
-          gridData?.map((item,index)=>(<h1 key={index}>{item?.name}</h1>))
-      }
+      {gridData?.map((item, index) => (
+        <h1 key={index}>{item?.name}</h1>
+      ))}
     </div>
   );
 };

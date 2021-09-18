@@ -1,16 +1,40 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { setCounterAction } from "../redux/actions";
 
 const Counter = () => {
-    const [counter, setCounter]=useState(0)
-    return (
-        <div>
-            <div className="d-flex">
-                <button onClick={()=>setCounter((prev)=>prev-1)}>-</button>
-                {counter}
-                <button onClick={()=>setCounter((prev)=>prev+1)}>+</button>
-            </div>
-        </div>
-    )
-}
+  const dispatch = useDispatch();
+  const { localStorage } = useSelector((state) => {
+    return state;
+  }, shallowEqual);
+  const [counter, setCounter] = useState(localStorage?.counter);
 
-export default Counter
+  useEffect(() => {
+    dispatch(setCounterAction(counter));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [counter]);
+  console.log(counter);
+  return (
+    <div>
+      <div className="d-flex">
+        <button
+          onClick={() => {
+            setCounter((prev) => prev - 1);
+          }}
+        >
+          -
+        </button>
+        {localStorage?.counter}
+        <button
+          onClick={() => {
+            setCounter((prev) => prev + 1);
+          }}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Counter;

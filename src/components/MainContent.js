@@ -1,8 +1,9 @@
 import React from 'react'
 
-const Counter = ({sidebar,children}) => {
+const Counter = ({setIsOpenSidebar,isOpenSidebar,children}) => {
     return (
-        <div className={sidebar?"sidebarOpen main": "sidebarOpen"}>
+        <div onClick={()=>setIsOpenSidebar(true)}>
+           {!isOpenSidebar && <button>Open</button>}
             {
                 children
             }
