@@ -4,7 +4,7 @@ import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 import paginationFactory, {
-  PaginationProvider,
+  // PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -53,7 +53,7 @@ const List = () => {
           value?.name?.last,
         email: value?.email,
         gender: value?.gender,
-        address: value?.location?.city + ", " + value?.location?.country,
+        phone: value?.phone,
       };
       dispatch(setLocalDataAction([...localData, newData]));
       // setLocalData([...localData, newData]);
@@ -73,20 +73,29 @@ const List = () => {
   const columns = [
     { dataField: "name", text: "Name", filter: textFilter() },
     { dataField: "email", text: "Email", sort: true, filter: textFilter() },
-    { dataField: "address", text: "Address" },
+    { dataField: "phone", text: "Phone" },
     { dataField: "gender", text: "Gender", sort: true, filter: textFilter() },
   ];
   return (
-    <div className="m-3">
+    <div className="container">
       {/* Local Data */}
-      <button onClick={() => dispatch(setLocalStorageEmptyAction())}>
-        Make Empty
-      </button>
-      <button
-        onClick={() => exportFromJSON({ data: jsonData, fileName, exportType })}
-      >
-        Download
-      </button>
+      <div className="mt-3 mb-3 d-flex justify-content-between align-item-center">
+        <button
+          className="btn btn-warning"
+          onClick={() => dispatch(setLocalStorageEmptyAction())}
+        >
+          Make Empty
+        </button>
+        <button
+          className="btn btn-success ml-3"
+          onClick={() =>
+            exportFromJSON({ data: jsonData, fileName, exportType })
+          }
+        >
+          Download
+        </button>
+      </div>
+      <h1>Locally Saved Data</h1>
       {
         <BootstrapTable
           bootstrap4
@@ -97,33 +106,38 @@ const List = () => {
           pagination={paginationOption}
         />
       }
-      {/* <table>
-          <thead>
-              <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Address</th>
-                  <th>Gender</th>
-              </tr>
-          </thead>
-          <tbody>
-          {localData?.map((item, index) => (
-              <tr key={index}>
-              <td>{item?.name?.first}</td>
-              <td>{item?.email}</td>
-              <td>{}</td>
-              <td>{item?.gender}</td>
-          </tr>
-      ))}
-          </tbody>
-      </table> */}
       <br />
-      Global Data
-      {gridData?.map((item, index) => (
-        <h5 key={index} onClick={() => addToLocal(item)}>
-          {item?.name?.first}
-        </h5>
-      ))}
+      <h1>Global Data</h1>
+      <table className="table">
+        <thead className="thead-dark">
+          <tr>
+            <th scope="col">SL</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {" "}
+          {gridData?.map((item, index) => (
+            <tr className="" key={index}>
+              <th scope="row">{index + 1}</th>
+              <td>
+                <h5>{item?.name?.first}</h5>
+              </td>
+              <td>{item?.email}</td>
+              <td>
+                <button
+                  className="btn btn-info"
+                  onClick={() => addToLocal(item)}
+                >
+                  Add to List
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -2,12 +2,22 @@ import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { setLocalDataAction } from "../redux/actions";
+import * as yup from "yup";
+
+let schema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  email: yup.string().email().required("Email is required"),
+  gender: yup.string().required("Gender is required"),
+  phone: yup.string().required("Phone Number is required"),
+});
+
 const initData = {
   name: "",
   email: "",
   gender: "",
   phone: "",
 };
+
 const Data = () => {
   const dispatch = useDispatch();
   const { localStorage } = useSelector((state) => {
@@ -21,10 +31,10 @@ const Data = () => {
   }, [localStorage]);
 
   return (
-    <div>
+    <div className="container">
       <Formik
         initialValues={initData}
-        // validate={}
+        validationSchema={schema}
         onSubmit={(values, { setSubmitting }) => {
           const duplicateCheck = gridData?.find(
             (item) => item?.email === values?.email
@@ -32,9 +42,8 @@ const Data = () => {
           if (duplicateCheck) {
             return alert("Already Exists");
           }
-          
+          alert("Data added");
           dispatch(setLocalDataAction([...gridData, { ...values }]));
-          // setGridData((prev) => [...prev, { ...values }]);
         }}
       >
         {({
@@ -45,49 +54,81 @@ const Data = () => {
           handleBlur,
           handleSubmit,
           isSubmitting,
+          isValid,
+          dirty,
           /* and other goodies */
         }) => (
           <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.name}
-            />
-            {errors.name && touched.name && errors.name}
-            <input
-              type="email"
-              name="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-            />
-            {errors.email && touched.email && errors.email}
+            <div className="form-group w-50 mt-2">
+              <input
+                type="text"
+                name="name"
+                className="form-control mb-2"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.name}
+              />
+              {errors.name && touched.name && errors.name}
+              <input
+                type="email"
+                name="email"
+                className="form-control mb-2"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+              />
+              {errors.email && touched.email && errors.email}
 
-            <input
-              type="text"
-              name="gender"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.gender}
-            />
-            {errors.gender && touched.gender && errors.gender}
-            <input
-              type="number"
-              name="phone"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.phone}
-            />
-            {errors.phone && touched.phone && errors.phone}
-            <button type="submit">Submit</button>
+              <input
+                type="text"
+                name="gender"
+                className="form-control mb-2"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.gender}
+              />
+
+              <select name="gender" id="gender" className="form-control mb-2">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+              {errors.gender && touched.gender && errors.gender}
+              <input
+                type="text"
+                name="phone"
+                className="form-control mb-2"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.phone}
+              />
+              {errors.phone && touched.phone && errors.phone}
+              <button
+                type="submit"
+                className="btn btn-primary d-block mt-2"
+                disabled={!dirty}
+              >
+                Submit
+              </button>
+            </div>
           </form>
         )}
       </Formik>
-      {gridData?.map((item, index) => (
-        <h1 key={index}>{item?.name}</h1>
-      ))}
+      <table className="table w-50">
+        <thead className="thead-dark">
+          <tr>
+            <th scope="col">SL</th>
+            <th scope="col">Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {gridData?.map((item, index) => (
+            <tr>
+              <th scope="row">{index + 1}</th>
+              <td key={index}>{item?.name}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

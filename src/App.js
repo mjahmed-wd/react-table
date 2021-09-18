@@ -8,18 +8,12 @@ import List from "./pages/List";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import Sidebar from "./components/Sidebar";
-// import Sidebar from "./components/Sidebar";
-// import Home from './pages/Home';
-// import Reports from './pages/Reports';
-// import Products from './pages/Products';
 
 function App() {
   const [isOpenSidebar, setIsOpenSidebar] = useState(true);
   return (
     <>
       <Router>
-        {/* <Navbar sidebar={sidebar} setSidebar={setSidebar} /> */}
-        {/* <Sidebar/> */}
         <div className={isOpenSidebar ? "sidebar width-15" : "sidebar width-0"}>
           <Sidebar setIsOpenSidebar={setIsOpenSidebar} />
         </div>
